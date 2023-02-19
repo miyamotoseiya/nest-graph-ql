@@ -9,3 +9,43 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id    Int     @default(autoincrement()) @id
+  name  String
+  account_id Int @unique
+  email String  @unique
+  password String
+  remenber_token String?
+  birthday DateTime
+  introduction String?
+  profile_image String?
+  cover_image String?
+  tweet Tweets?
+  created_at DateTime
+  updated_at DateTime @updatedAt
+  deleted_at DateTime
+
+  @@index([email, account_id])
+}
+
+model Tweets {
+  id    Int     @default(autoincrement()) @id
+  user  User  @relation(fields: [user_id], references: [id]) 
+  user_id Int @unique
+  tweet_image Tweet_images?
+  body  String?
+  created_at DateTime
+  updated_at DateTime @updatedAt
+  deleted_at DateTime
+}
+
+model Tweet_images {
+  id Int        @default(autoincrement()) @id
+  tweet  Tweets  @relation(fields: [tweet_id], references: [id]) 
+  tweet_id Int @unique 
+  path String
+  created_at DateTime
+  updated_at DateTime @updatedAt
+  deleted_at DateTime
+}
